@@ -45,16 +45,19 @@ dependencies {
     implementation "org.springframework.boot:spring-boot-starter-data-jpa"
     implementation "org.springframework.boot:spring-boot-starter-security"
     implementation "org.springframework.boot:spring-boot-starter-web"
+    implementation("org.springframework.boot:spring-boot-starter-webflux")
 
     implementation "org.flywaydb:flyway-core:$flywayVersion"
     implementation "org.flywaydb:flyway-mysql:$flywayVersion"
     runtimeOnly "com.mysql:mysql-connector-j:$mysqlVersion"
+    implementation("io.projectreactor:reactor-core")
 
     implementation "io.jsonwebtoken:jjwt-api:$jjwtVersion"
     runtimeOnly "io.jsonwebtoken:jjwt-impl:$jjwtVersion"
     runtimeOnly "io.jsonwebtoken:jjwt-jackson:$jjwtVersion"
 
-    implementation "software.amazon.awssdk:s3:$awsSdkVersion"
+    implementation platform("software.amazon.awssdk:bom:$awsSdkVersion")
+    implementation "software.amazon.awssdk:s3"
 
     compileOnly "org.projectlombok:lombok:$lombokVersion"
     annotationProcessor "org.projectlombok:lombok:$lombokVersion"
