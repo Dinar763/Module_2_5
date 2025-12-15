@@ -2,11 +2,13 @@ package com.dinar.spring_app.database.entity;
 
 import jakarta.persistence.*;
 import lombok.Data;
+import lombok.EqualsAndHashCode;
 
 import java.util.List;
 
 @Entity
 @Table(name = "roles")
+@EqualsAndHashCode(callSuper = true)
 @Data
 public class Role extends BaseEntity {
 

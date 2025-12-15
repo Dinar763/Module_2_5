@@ -12,6 +12,7 @@ import com.dinar.spring_app.exception.ServiceException;
 import com.dinar.spring_app.service.FileService;
 import io.minio.*;
 import jakarta.transaction.Transactional;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
 import java.io.IOException;
@@ -26,7 +27,9 @@ public class FileServiceImpl implements FileService {
     private final UserRepository userRepository;
     private final EventRepository eventRepository;
     private final MinioClient minioClient;
-    private final String bucketName = "my-bucket";
+
+    @Value("${minio.bucket-name:files}")
+    private String bucketName;
 
     public FileServiceImpl(FileRepository fileRepository,
                            UserRepository userRepository,

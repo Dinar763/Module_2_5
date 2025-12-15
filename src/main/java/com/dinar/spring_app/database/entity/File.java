@@ -8,6 +8,7 @@ import lombok.*;
 @AllArgsConstructor
 @NoArgsConstructor
 @Entity
+@EqualsAndHashCode(callSuper = true)
 @Builder
 @Table(name = "files")
 @ToString(exclude = "user")

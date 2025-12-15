@@ -16,6 +16,7 @@ import java.util.stream.Collectors;
 @Entity
 @Builder
 @Table(name = "users")
+@EqualsAndHashCode(callSuper = true)
 @ToString
 public class User extends BaseEntity {
 

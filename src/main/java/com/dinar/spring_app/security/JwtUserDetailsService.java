@@ -1,6 +1,5 @@
 package com.dinar.spring_app.security;
 
-import com.dinar.spring_app.security.jwt.JwtUser;
 import com.dinar.spring_app.security.jwt.JwtUserFactory;
 import com.dinar.spring_app.service.UserService;
 import lombok.RequiredArgsConstructor;

@@ -5,11 +5,13 @@ import lombok.Data;
 import lombok.EqualsAndHashCode;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.LastModifiedDate;
+import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 import java.util.Date;
 
 @MappedSuperclass
 @Data
+@EntityListeners(AuditingEntityListener.class)
 public class BaseEntity {
 
     @Id
@@ -18,10 +20,10 @@ public class BaseEntity {
     private Long id;
 
     @CreatedDate
-    @Column(name = "created")
+    @Column(name = "created", nullable = false)
     private Date created;
 
     @LastModifiedDate
-    @Column(name = "updated")
+    @Column(name = "updated", nullable = false)
     private Date updated;
 }

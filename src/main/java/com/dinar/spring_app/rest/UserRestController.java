@@ -5,18 +5,22 @@ import com.dinar.spring_app.security.annotation.IsAdmin;
 import com.dinar.spring_app.security.annotation.IsModerator;
 import com.dinar.spring_app.security.annotation.IsUser;
 import com.dinar.spring_app.service.UserService;
+import com.dinar.spring_app.utill.SecurityUtils;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.server.ResponseStatusException;
 
 import java.util.List;
 
-import static com.dinar.spring_app.utill.SecurityUtils.getCurrentUserFromSecurity;
 
 @RestController
 @RequestMapping("/api/v1/users")
+@Tag(name = "Users API", description = "Операции с пользователями")
 public class UserRestController {
 
     private final UserService userService;
@@ -28,8 +32,11 @@ public class UserRestController {
 
     @GetMapping("/me")
     @IsUser
+    @Operation(summary = "Получить текущего пользователя")
     public ResponseEntity<User> getCurrentUser() {
-        var currentUser = getCurrentUserFromSecurity();
+        String username = SecurityUtils.getCurrentUsername();
+        User currentUser = userService.findByUserName(username)
+                                      .orElseThrow(() -> new UsernameNotFoundException("User not found"));
         var user = userService.findById(currentUser.getId())
                               .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND));
         return ResponseEntity.ok(user);
@@ -37,6 +44,7 @@ public class UserRestController {
 
     @GetMapping(value = "id/{id}")
     @IsModerator
+    @Operation(summary = "Получить пользователя по ID пользователя")
     public ResponseEntity<User> getUserById(@PathVariable("id") Long userId) {
         var user = userService.findById(userId)
                 .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND));
@@ -45,6 +53,7 @@ public class UserRestController {
 
     @GetMapping(value = "username/{username}")
     @IsModerator
+    @Operation(summary = "Получить пользователя по имени пользователя")
     public ResponseEntity<User> getUserByName(@PathVariable String username) {
         var user = userService.findByUserName(username)
                               .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND));
@@ -53,6 +62,7 @@ public class UserRestController {
 
     @GetMapping
     @IsAdmin
+    @Operation(summary = "Получить список всех пользователей")
     public ResponseEntity<List<User>> getAll() {
         var users = userService.findAll();
         return users.isEmpty()
@@ -62,6 +72,7 @@ public class UserRestController {
 
     @DeleteMapping(value = "id/{id}")
     @IsAdmin
+    @Operation(summary = "Удалить пользователя по ID пользователя")
     public ResponseEntity<Void> deleteUserById(@PathVariable("id") Long userId) {
         userService.findById(userId)
                               .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND));
@@ -70,6 +81,7 @@ public class UserRestController {
     }
 
     @PostMapping
+    @Operation(summary = "Сохранить пользователя")
     public ResponseEntity<User> save(@RequestBody User user) {
         var savedUser = userService.register(user);
         return ResponseEntity.status(HttpStatus.CREATED).body(savedUser);

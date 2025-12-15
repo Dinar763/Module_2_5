@@ -3,16 +3,13 @@ package com.dinar.spring_app.database.entity;
 import com.dinar.spring_app.database.entity.enums.EventStatus;
 import jakarta.persistence.*;
 import lombok.*;
-import org.hibernate.annotations.CreationTimestamp;
-
-import java.time.LocalDateTime;
 
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
 @Entity
 @Builder
-@EqualsAndHashCode(onlyExplicitlyIncluded = true)
+@EqualsAndHashCode(callSuper = true)
 @ToString
 @Table(name = "events")
 public class Event extends BaseEntity {
